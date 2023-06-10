@@ -43,7 +43,7 @@ const sizes = {
 const fov = 90
 const camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1)
 
-camera.position.set(10, 10, 10)
+camera.position.set(8, 8, 8)
 camera.lookAt(new THREE.Vector3(0, 2.5, 0))
 
 /**
@@ -110,8 +110,8 @@ function tic() {
 	const d = camera.position
 		.clone()
 		.multiplyScalar(
-			Math.sin(MathUtils.degToRad(fov1 / 2)) /
-				Math.sin(MathUtils.degToRad(fov2 / 2))
+			Math.tan(MathUtils.degToRad(fov1 / 2)) /
+				Math.tan(MathUtils.degToRad(fov2 / 2))
 		)
 
 	// // console.log(d)
