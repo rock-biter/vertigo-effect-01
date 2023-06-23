@@ -1,0 +1,11 @@
+Model Information:
+* title:	SAMURAI GIRL
+* source:	https://sketchfab.com/3d-models/samurai-girl-c66dcb7f7e8e4be8aed02f9023e373c8
+* author:	Yudi.Anggara (https://sketchfab.com/Yudi.Anggara)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "SAMURAI GIRL" (https://sketchfab.com/3d-models/samurai-girl-c66dcb7f7e8e4be8aed02f9023e373c8) by Yudi.Anggara (https://sketchfab.com/Yudi.Anggara) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

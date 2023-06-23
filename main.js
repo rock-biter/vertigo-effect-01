@@ -2,6 +2,11 @@ import './style.css'
 import * as THREE from 'three'
 import { ArcballControls } from 'three/examples/jsm/controls/ArcballControls'
 import { MathUtils } from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import samurai from './winter-girl/scene.gltf?url'
+import envmap from './textures/envmap.jpg?url'
+
+const loader = new GLTFLoader()
 
 /**
  * Scene
@@ -11,21 +16,35 @@ const scene = new THREE.Scene()
 /**
  * Manhattan
  */
-const material = new THREE.MeshPhysicalMaterial({ color: 0x7744cb })
+const texture = new THREE.TextureLoader().load(envmap)
+// scene.background = texture
+
+const material = new THREE.MeshBasicMaterial({
+	color: 0xffffff,
+	side: THREE.BackSide,
+	map: texture,
+})
+
+const geometry = new THREE.SphereGeometry(500, 60, 40)
+const env = new THREE.Mesh(geometry, material)
+
+env.rotation.y = Math.PI * 0.5
+
+scene.add(env)
 
 const size = 6
 
-for (let i = 0; i < size; i++) {
-	for (let j = 0; j < size; j++) {
-		const height = Math.random() * 4 + 1
+// for (let i = 0; i < size; i++) {
+// 	for (let j = 0; j < size; j++) {
+// 		const height = Math.random() * 4 + 1
 
-		const geometry = new THREE.BoxGeometry(1, height, 1)
+// 		const geometry = new THREE.BoxGeometry(1, height, 1)
 
-		const mesh = new THREE.Mesh(geometry, material)
-		mesh.position.set(-size + i * 2, height / 2, -size + j * 2)
-		scene.add(mesh)
-	}
-}
+// 		const mesh = new THREE.Mesh(geometry, material)
+// 		mesh.position.set(-size + i * 2, height / 2, -size + j * 2)
+// 		scene.add(mesh)
+// 	}
+// }
 
 const mouse = new THREE.Vector2(0, 0)
 let factor = 0
@@ -43,7 +62,7 @@ const sizes = {
 const fov = 90
 const camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1)
 
-camera.position.set(8, 8, 8)
+camera.position.set(0, 0, 0.4)
 camera.lookAt(new THREE.Vector3(0, 2.5, 0))
 
 /**
@@ -85,9 +104,11 @@ document.body.appendChild(renderer.domElement)
  */
 const clock = new THREE.Clock()
 
-const light = new THREE.PointLight(0xffffff, 2.5)
-light.position.set(size * 1.5, size * 4, size * 1.5)
+const light = new THREE.PointLight(0xffffff, 0.8)
+light.position.set(10, 10, 10)
 scene.add(light)
+
+scene.envmap = texture
 
 /**
  * frame loop
@@ -102,7 +123,7 @@ function tic() {
 	 */
 	const time = clock.getElapsedTime()
 	// let factor = Math.abs(Math.sin(time))
-	factor = MathUtils.lerp(factor, mouse.x * 0.99 - 0.01 / 2, 0.1)
+	factor = MathUtils.lerp(factor, mouse.x * 0.5, 0.1)
 	let fov1 = camera.fov
 	let fov2 = (1 - factor) * fov
 	camera.fov = fov2
@@ -118,7 +139,7 @@ function tic() {
 
 	camera.position.copy(d)
 	// // // console.log(factor)
-	camera.lookAt(new THREE.Vector3(0, 2.5, 0))
+	camera.lookAt(new THREE.Vector3(0, 0, 0))
 	camera.updateProjectionMatrix()
 
 	renderer.render(scene, camera)
@@ -149,4 +170,15 @@ function onResize() {
 window.addEventListener('mousemove', function (e) {
 	mouse.x = e.pageX / window.innerWidth
 	mouse.y = e.pageY / window.innerHeight
+})
+
+loader.load(samurai, (gltf) => {
+	console.log(gltf)
+
+	const model = gltf.scene
+	// model.rotation.y = -Math.PI * 0.35
+
+	model.position.y -= 1.6
+
+	scene.add(model)
 })
