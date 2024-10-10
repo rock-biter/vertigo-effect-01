@@ -110,8 +110,8 @@ function tic() {
 	const d = camera.position
 		.clone()
 		.multiplyScalar(
-			Math.sin(MathUtils.degToRad(fov1 / 2)) /
-				Math.sin(MathUtils.degToRad(fov2 / 2))
+			Math.tan(MathUtils.degToRad(fov1 / 2)) /
+				Math.tan(MathUtils.degToRad(fov2 / 2))
 		)
 
 	// // console.log(d)
