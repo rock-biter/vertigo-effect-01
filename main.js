@@ -22,7 +22,7 @@ for (let i = 0; i < size; i++) {
 		const geometry = new THREE.BoxGeometry(1, height, 1)
 
 		const mesh = new THREE.Mesh(geometry, material)
-		mesh.position.set(-size + i * 2, height / 2, -size + j * 2)
+		mesh.position.set(-size + i * 2 + 1, height / 2, -size + j * 2 + 1)
 		scene.add(mesh)
 	}
 }
@@ -43,7 +43,7 @@ const sizes = {
 const fov = 90
 const camera = new THREE.PerspectiveCamera(fov, sizes.width / sizes.height, 0.1)
 
-camera.position.set(10, 10, 10)
+camera.position.set(8, 8, 8)
 camera.lookAt(new THREE.Vector3(0, 2.5, 0))
 
 /**
@@ -89,6 +89,38 @@ const light = new THREE.PointLight(0xffffff, 2.5)
 light.position.set(size * 1.5, size * 4, size * 1.5)
 scene.add(light)
 
+const initialD = camera.position.clone()
+const finalD = camera.position.clone().multiplyScalar(100)
+const intialTan = Math.tan(MathUtils.degToRad(camera.fov / 2))
+const RATIO = initialD.length() * intialTan
+const finalTan = RATIO / finalD.length()
+const finalFov = MathUtils.radToDeg(Math.atan(finalTan) * 2)
+
+function updateCamera(progress) {
+	const newFov = MathUtils.lerp(fov, finalFov, progress)
+	// console.log(newFov)
+
+	const length = RATIO / Math.tan(MathUtils.degToRad(newFov / 2))
+
+	console.log(length)
+	camera.position.normalize().multiplyScalar(length)
+	camera.fov = newFov
+
+	// const d = camera.position
+	// 	.clone()
+	// 	.multiplyScalar(
+	// 		Math.tan(MathUtils.degToRad(fov1 / 2)) /
+	// 			Math.tan(MathUtils.degToRad(fov2 / 2))
+	// 	)
+
+	// // console.log(d)
+
+	// camera.position.copy(d)
+	// // // console.log(factor)
+	camera.lookAt(new THREE.Vector3(0, 2.5, 0))
+	camera.updateProjectionMatrix()
+}
+
 /**
  * frame loop
  */
@@ -102,24 +134,12 @@ function tic() {
 	 */
 	const time = clock.getElapsedTime()
 	// let factor = Math.abs(Math.sin(time))
-	factor = MathUtils.lerp(factor, mouse.x * 0.99 - 0.01 / 2, 0.1)
-	let fov1 = camera.fov
-	let fov2 = (1 - factor) * fov
-	camera.fov = fov2
+	// factor = MathUtils.lerp(factor, mouse.x * 0.99 - 0.01 / 2, 0.1)
+	// let fov1 = camera.fov
+	// let fov2 = (1 - factor) * fov
+	// camera.fov = fov2
 
-	const d = camera.position
-		.clone()
-		.multiplyScalar(
-			Math.tan(MathUtils.degToRad(fov1 / 2)) /
-				Math.tan(MathUtils.degToRad(fov2 / 2))
-		)
-
-	// // console.log(d)
-
-	camera.position.copy(d)
-	// // // console.log(factor)
-	camera.lookAt(new THREE.Vector3(0, 2.5, 0))
-	camera.updateProjectionMatrix()
+	// const d = camera.position.lerpVectors(initialD, finalD, mouse.x)
 
 	renderer.render(scene, camera)
 
@@ -149,4 +169,8 @@ function onResize() {
 window.addEventListener('mousemove', function (e) {
 	mouse.x = e.pageX / window.innerWidth
 	mouse.y = e.pageY / window.innerHeight
+
+	// console.log(mouse.x)
+
+	updateCamera(mouse.x)
 })
