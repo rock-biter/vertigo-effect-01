@@ -61,7 +61,7 @@ const camera = new THREE.PerspectiveCamera(
 	10000
 )
 
-camera.position.set(8, 8, 8)
+camera.position.set(9, 9, 9)
 camera.lookAt(new THREE.Vector3(0, 0, 0))
 
 /**
@@ -86,22 +86,21 @@ const light = new THREE.PointLight(0xffffff, 2.5)
 light.position.set(size * 1.5, size * 4, size * 1.5)
 scene.add(light)
 
-const initialD = camera.position.clone()
-// const finalD = camera.position.clone().multiplyScalar(500)
-const intialTan = Math.tan(MathUtils.degToRad(camera.fov / 2))
-const RATIO = initialD.length() * intialTan
-const finalFov = 0.5
+const finalFOV = 0.5
+const initialPos = camera.position.clone()
+const fovTan = Math.tan(MathUtils.degToRad(fov / 2))
+const RATIO = initialPos.length() * fovTan
 
 function updateCamera(progress) {
-	const newFov = MathUtils.lerp(fov, finalFov, progress)
-	// console.log(newFov)
+	console.log(progress)
 
-	const length = RATIO / Math.tan(MathUtils.degToRad(newFov / 2))
+	const newFOV = MathUtils.lerp(fov, finalFOV, progress)
+	const newFovTan = Math.tan(MathUtils.degToRad(newFOV / 2))
+	const d = RATIO / newFovTan
 
-	console.log(length)
-	camera.position.normalize().multiplyScalar(length)
-	camera.fov = newFov
+	camera.fov = newFOV
 
+	camera.position.normalize().multiplyScalar(d)
 	camera.updateProjectionMatrix()
 }
 
