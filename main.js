@@ -1,6 +1,5 @@
 import './style.css'
 import * as THREE from 'three'
-import { ArcballControls } from 'three/examples/jsm/controls/ArcballControls'
 import { MathUtils } from 'three'
 import GUI from 'lil-gui'
 
@@ -13,8 +12,8 @@ const config = {
 	progress: 0,
 }
 
-gui.add(config, 'progress', 0, 1, 0.01).onChange((val) => {
-	updateCamera(val)
+gui.add(config, 'progress', 0, 1, 0.01).onChange((progress) => {
+	updateCamera(progress)
 })
 
 /**
