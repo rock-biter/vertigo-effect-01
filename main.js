@@ -86,6 +86,9 @@ const light = new THREE.PointLight(0xffffff, 2.5)
 light.position.set(size * 1.5, size * 4, size * 1.5)
 scene.add(light)
 
+/**
+ * Dolly zoom
+ */
 const finalFOV = 0.5
 const initialPos = camera.position.clone()
 const fovTan = Math.tan(MathUtils.degToRad(fov / 2))
